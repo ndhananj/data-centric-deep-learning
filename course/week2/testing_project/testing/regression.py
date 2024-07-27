@@ -99,7 +99,11 @@ def build_regression_test(system, loader):
     # batch_is_correct: List[int] (not a torch.Tensor!)
     #   List of integers - 1 if the model got that element correct 
     #                    - 0 if the model got that element incorrect
-    pass # remove me
+    cross_ent = F.cross_entropy(logits, labels, reduction='none')
+    batch_loss = F.softmax(cross_ent, dim=0).tolist()
+    _, predicted = torch.max(logits, dim=1)
+    batch_is_correct =  (predicted == labels).int().tolist()
+
     # ================================
     losses.extend(batch_loss)
     is_correct.extend(batch_is_correct)
