@@ -7,6 +7,8 @@ from collections import defaultdict
 
 from .paths import DATA_DIR
 
+import re
+from collections import Counter
 
 class ProductReviewEmbeddings(Dataset):
   r"""RoBERTa embeddings of customer reviews. Embeddings are precomputed 
@@ -51,7 +53,10 @@ class ProductReviewEmbeddings(Dataset):
     # Notes:
     # --
     # Convert tokens to lowercase when updating vocab.
-    pass  # remove me
+    vocab = Counter()
+    for value in self.data['review']:
+      tokens = re.findall(r'\b\w+\b', value.lower())
+      vocab.update(tokens)
     # ===============================
     return dict(vocab)
 
@@ -111,7 +116,10 @@ class ProductReviewStream(Dataset):
     # Type:
     # --
     # vocab: dict[str, int]
-    pass  # remove me
+    vocab = Counter()
+    for value in self.data['review']:
+      tokens = re.findall(r'\b\w+\b', value.lower())
+      vocab.update(tokens)
     # ===============================
     return dict(vocab)
 
