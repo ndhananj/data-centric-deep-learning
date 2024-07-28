@@ -7,7 +7,6 @@ from os.path import join
 from pprint import pprint
 
 from torchvision import transforms
-from skimage.util import random_noise
 from metaflow import FlowSpec, step, Parameter
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
@@ -55,8 +54,7 @@ class TrainFlow(FlowSpec):
         # Any augmentations to apply to the training dataset with the goal of 
         # enlarging the effective dataset size via "self supervision": an augmented
         # data point maintains the same label.
-        transforms.Compose([transforms.ToTensor(),lambda x: torch.from_numpy(random_noise(x)).float(),]),
-        transforms.Compose([transforms.RandomRotation(45), transforms.ToTensor(),]),
+        transforms.RandomRotation(45), 
         # ================================
         transforms.ToTensor(),
       ])
@@ -109,7 +107,7 @@ class TrainFlow(FlowSpec):
 
     # Load the best checkpoint and compute results using `self.trainer.test`
     self.trainer.test(system, dm, ckpt_path = 'best')
-    results = self.system.test_results
+    results = system.test_results
 
     # print results to command line
     pprint(results)
