@@ -20,6 +20,7 @@ def random_sampling(pred_probs: torch.Tensor, budget : int = 1000) -> List[int]:
   # Note that we fixed the random seed above. Please do not edit.
   # HINT: when you randomly sample, do not choose duplicates.
   # HINT: please ensure indices is a list of integers
+  indices = np.random.choice(np.arange(len(pred_probs)),size=budget,replace=False).tolist()
   # ================================
   return indices
 
@@ -38,6 +39,7 @@ def uncertainty_sampling(pred_probs: torch.Tensor, budget : int = 1000) -> List[
   # for a N-way classification problem.
   # Take the first 1000.
   # HINT: please ensure indices is a list of integers
+  indices=torch.argsort(torch.sum((pred_probs - chance_prob)**2, dim=1))[:budget].tolist()
   # ================================
   return indices
 
@@ -52,6 +54,7 @@ def margin_sampling(pred_probs: torch.Tensor, budget : int = 1000) -> List[int]:
   # FILL ME OUT
   # Sort indices by the different in predicted probabilities in the top two classes per example.
   # Take the first 1000.
+  indices = pred_probs.topk(2, dim=1).values.diff(dim=1).squeeze().argsort()[:budget].tolist()
   # ================================
   return indices
 
@@ -70,5 +73,7 @@ def entropy_sampling(pred_probs: torch.Tensor, budget : int = 1000) -> List[int]
   # Sort the indices by the entropy of the predicted probabilities from high to low.
   # Take the first 1000.
   # HINT: Add epsilon when taking a log for entropy computation
+  entropies = -torch.sum(pred_probs * torch.log(pred_probs + epsilon), dim=1)
+  indices = torch.argsort(entropies, descending=True)[:budget].tolist()
   # ================================
   return indices
