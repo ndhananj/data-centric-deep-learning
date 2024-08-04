@@ -63,7 +63,7 @@ class BuildEvaluationSet(FlowSpec):
         # Use `query_openai` to generate a question from the chunk text `chunk`. 
         # See `rag/prompts` for a bank of relevant prompts to use. You may edit any prompts in there.
         # Save the generated question (as a string) into the `question` variable.
-        # TODO
+        question = query_openai(self.openai_api_key,get_question_prompt(chunk))
         # ===========================
         assert len(question) > 0, f"Did you complete the coding section in `write_questions`?"
         questions.append(question)
@@ -92,7 +92,11 @@ class BuildEvaluationSet(FlowSpec):
       # Make sure the response is an integer. 
       # HINT: LLM are not perfect. When you try to cast to an integer, wrap it in a try/catch statement.
       #       Set the rating to 0 if integer casting fails.
-      # TODO
+      rating_string = query_openai(self.openai_api_key,get_question_judge_prompt(self.questions[i],self.contexts[i]))
+      try:
+        rating = int(rating_string)
+      except Exception:
+        rating = 0
       # ===========================
       assert rating >= 0, f"Did you complete the coding section in `grade_questions`?"
       ratings.append(rating)
@@ -116,7 +120,7 @@ class BuildEvaluationSet(FlowSpec):
       # FILL ME OUT
       # Use `query_openai` to write a short answer to each question.
       # See `rag/prompts` for a bank of relevant prompts to use. You may edit any prompts in there.
-      # TODO
+      hypo_answer = query_openai(self.openai_api_key,get_hyde_response_prompt(self.questions[i]))
       # ===========================
       assert len(hypo_answer) > 0, f"Did you complete the coding section in `write_hypothetical_answers`?"
       hypo_answers.append(hypo_answer)
