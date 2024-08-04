@@ -28,84 +28,15 @@ I added the winter documents into the collections after I had generated the ques
 
 The thenlper/gte-small is slightly better than the other. But all hit rates were suspiciously good. 
 
-|
-hit_rate 
-| 
-embedding 
-| 
-text_search_weight 
-| 
-hyde_embeddings
-|
-|
-0.9847715736040609 
-| 
-all-MiniLM-L6-v2 
-| 
-0.5 
-| 
-False
-|
-|
-0.9949238578680203 
-| 
-thenlper/gte-small 
-| 
-0.0 
-| 
-False
-|
-|
-0.9949238578680203 
-| 
-thenlper/gte-small 
-| 
-0.0 
-| 
-True
-|
-|
-0.9949238578680203 
-| 
-thenlper/gte-small 
-| 
-0.5 
-| 
-False
-|
-|
-0.9847715736040609 
-| 
-all-MiniLM-L6-v2 
-| 
-0.0 
-| 
-False
-|
-|
-0.9847715736040609 
-| 
-all-MiniLM-L6-v2 
-| 
-0.5 
-| 
-True
-|
-|
-0.9949238578680203 
-| 
-thenlper/gte-small 
-| 
-0.5 
-| 
-True
-|
-|
-0.9847715736040609 
-| 
-all-MiniLM-L6-v2 
-| 
-0.0 
-| 
-True
-|
+
+|hit_rate           | embedding          | text_search_weight | hyde_embeddings|
+|-------------------|:------------------:|:------------------:|---------------:|
+|0.9847715736040609 | all-MiniLM-L6-v2   | 0.5                | False          |
+|0.9949238578680203 | thenlper/gte-small | 0.0                | False          |
+|0.9949238578680203 | thenlper/gte-small | 0.0                | True           |
+|0.9949238578680203 | thenlper/gte-small | 0.5                | False          |
+|0.9847715736040609 | all-MiniLM-L6-v2   | 0.0                | False          |
+|0.9847715736040609 | all-MiniLM-L6-v2   | 0.5                | True           |
+|0.9949238578680203 | thenlper/gte-small | 0.5                | True           |
+|0.9847715736040609 | all-MiniLM-L6-v2   | 0.0                | True           |
+
