@@ -1,6 +1,7 @@
 import time
 import torch
 import random
+import itertools
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -15,6 +16,7 @@ from sentence_transformers import SentenceTransformer
 
 from rag.paths import DATA_DIR
 from rag.vector import retrieve_documents, get_my_collection_name
+
 
 load_dotenv()
 
@@ -69,7 +71,11 @@ class OptimizeRagParams(FlowSpec):
     # - whether to use hyde embeddings or question embeddings
     # In total this is searching over 8 configurations. In practice, we may search
     # over 100,000s but this should illustruate the point.
-    # TODO
+    choices = { 'embedding'         :['all-MiniLM-L6-v2', 'thenlper/gte-small'], 
+                'text_search_weight':[0, 0.5], 
+                'hyde_embeddings'   :[True, False] }
+    hparams = [DotMap(dict(zip(choices.keys(), combo))) 
+          for combo in itertools.product(*choices.values())]
     # ===========================
     assert len(hparams) > 0, "Remember to complete the code in `get_search_space`"
     assert len(hparams) == 8, "You should have 8 configurations" 
@@ -106,7 +112,10 @@ class OptimizeRagParams(FlowSpec):
       #      the three hyperparameters in `hparams` to do this.
       #   2. Track if the correct document appears in the top 3 retrieved documents.
       #      +1 to `hits` if it does. +0 to `hits` if not.
-      # TODO
+      rets = retrieve_documents(self.starpoint_api_key, collection_name, question,
+                         embedding_model.encode(question).tolist(), top_k = 3,
+                         text_search_weight=self.input.text_search_weight)
+      hits += gt_id in [ret['metadata']['doc_id'] for ret in rets]
       # ===========================
 
     hit_rate = hits / float(len(questions))
